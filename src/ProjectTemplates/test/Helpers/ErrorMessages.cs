@@ -8,7 +8,7 @@ namespace Templates.Test.Helpers
         public static string GetErrorMessage(string step, Project project, ProcessEx processResult)
         {
             return $@"Project {project.ProjectArguments} failed to {step}.
-{processResult.GetFormattedOutput()}";
+{processResult.GetFormattedOutput(processResult.HasExited)}";
         }
     }
 }
