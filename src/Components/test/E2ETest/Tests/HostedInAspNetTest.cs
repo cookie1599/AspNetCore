@@ -16,8 +16,8 @@ namespace Microsoft.AspNetCore.Components.E2ETest.Tests
     public class HostedInAspNetTest : ServerTestBase<AspNetSiteServerFixture>
     {
         public HostedInAspNetTest(
-            BrowserFixture browserFixture, 
-            AspNetSiteServerFixture serverFixture, 
+            BrowserFixture browserFixture,
+            AspNetSiteServerFixture serverFixture,
             ITestOutputHelper output)
             : base(browserFixture, serverFixture, output)
         {
@@ -25,10 +25,8 @@ namespace Microsoft.AspNetCore.Components.E2ETest.Tests
             serverFixture.Environment = AspNetEnvironment.Development;
         }
 
-        public override async Task InitializeAsync()
+        protected override void InitializeAsyncCore()
         {
-            await base.InitializeAsync();
-
             Navigate("/", noReload: true);
             WaitUntilLoaded();
         }

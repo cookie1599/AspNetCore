@@ -18,16 +18,15 @@ namespace Microsoft.AspNetCore.Components.E2ETest.Tests
         : ServerTestBase<DevHostServerFixture<StandaloneApp.Program>>, IDisposable
     {
         public StandaloneAppTest(
-            BrowserFixture browserFixture, 
+            BrowserFixture browserFixture,
             DevHostServerFixture<StandaloneApp.Program> serverFixture,
             ITestOutputHelper output)
             : base(browserFixture, serverFixture, output)
         {
         }
 
-        public override async Task InitializeAsync()
+        protected override void InitializeAsyncCore()
         {
-            await base.InitializeAsync();
             Navigate("/", noReload: true);
             WaitUntilLoaded();
         }

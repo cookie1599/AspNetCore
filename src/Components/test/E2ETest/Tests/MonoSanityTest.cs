@@ -24,10 +24,8 @@ namespace Microsoft.AspNetCore.Components.E2ETest.Tests
             serverFixture.BuildWebHostMethod = MonoSanity.Program.BuildWebHost;
         }
 
-        public override async Task InitializeAsync()
+        protected override void InitializeAsyncCore()
         {
-            await base.InitializeAsync();
-
             Navigate("/", noReload: true);
             WaitUntilMonoRunningInBrowser();
         }

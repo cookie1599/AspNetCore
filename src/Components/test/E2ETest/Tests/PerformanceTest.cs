@@ -24,10 +24,8 @@ namespace Microsoft.AspNetCore.Components.E2ETest.Tests
         {
         }
 
-        public override async Task InitializeAsync()
+        protected override void InitializeAsyncCore()
         {
-            await base.InitializeAsync();
-
             Navigate("/", noReload: true);
         }
 

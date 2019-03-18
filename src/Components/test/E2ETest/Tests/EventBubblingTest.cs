@@ -29,10 +29,8 @@ namespace Microsoft.AspNetCore.Components.E2ETest.Tests
         {
         }
 
-        public override async Task InitializeAsync()
+        protected override void InitializeAsyncCore()
         {
-            await base.InitializeAsync();
-
             Navigate(ServerPathBase, noReload: !_serverFixture.UsingAspNetHost);
             MountTestComponent<EventBubblingComponent>();
         }

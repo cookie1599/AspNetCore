@@ -26,10 +26,8 @@ namespace Microsoft.AspNetCore.Components.E2ETest.ServerExecutionTests
             _serverFixture.BuildWebHostMethod = ComponentsApp.Server.Program.BuildWebHost;
         }
 
-        public override async Task InitializeAsync()
+        protected override void InitializeAsyncCore()
         {
-            await base.InitializeAsync();
-
             Navigate("/", noReload: false);
             WaitUntilLoaded();
         }

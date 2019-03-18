@@ -23,10 +23,8 @@ namespace Microsoft.AspNetCore.Components.E2ETest.Tests
         {
         }
 
-        public override async Task InitializeAsync()
+        protected override void InitializeAsyncCore()
         {
-            await base.InitializeAsync();
-
             // On WebAssembly, page reloads are expensive so skip if possible
             Navigate(ServerPathBase, noReload: !_serverFixture.UsingAspNetHost);
             MountTestComponent<BindCasesComponent>();

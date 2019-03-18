@@ -33,10 +33,8 @@ namespace Microsoft.AspNetCore.Components.E2ETest.Tests
             _apiServerFixture = apiServerFixture;
         }
 
-        public override async Task InitializeAsync()
+        protected override void InitializeAsyncCore()
         {
-            await base.InitializeAsync();
-
             Navigate(ServerPathBase, noReload: true);
             _appElement = MountTestComponent<BinaryHttpRequestsComponent>();
         }

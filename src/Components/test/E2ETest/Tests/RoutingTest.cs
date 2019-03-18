@@ -27,10 +27,8 @@ namespace Microsoft.AspNetCore.Components.E2ETest.Tests
         {
         }
 
-        public override async Task InitializeAsync()
+        protected override void InitializeAsyncCore()
         {
-            await base.InitializeAsync();
-
             Navigate(ServerPathBase, noReload: false);
             WaitUntilTestSelectorReady();
         }
@@ -99,7 +97,7 @@ namespace Microsoft.AspNetCore.Components.E2ETest.Tests
         [Fact]
         public void CanArriveAtFallbackPageFromBadURI()
         {
-            SetUrlViaPushState("/Oopsie_Daisies%20%This_Aint_A_Real_Page"); 
+            SetUrlViaPushState("/Oopsie_Daisies%20%This_Aint_A_Real_Page");
 
             var app = MountTestComponent<TestRouter>();
             Assert.Equal("Oops, that component wasn't found!", app.FindElement(By.Id("test-info")).Text);
@@ -128,14 +126,14 @@ namespace Microsoft.AspNetCore.Components.E2ETest.Tests
 
                 var app = MountTestComponent<TestRouter>();
                 var button = app.FindElement(By.LinkText("Other"));
-              
+
                 new Actions(Browser).KeyDown(key).Click(button).Build().Perform();
 
                 Browser.Equal(2, () => Browser.WindowHandles.Count);
             }
             finally
             {
-                // Leaving the ctrl key up 
+                // Leaving the ctrl key up
                 new Actions(Browser).KeyUp(key).Build().Perform();
 
                 // Closing newly opened windows if a new one was opened
@@ -158,7 +156,7 @@ namespace Microsoft.AspNetCore.Components.E2ETest.Tests
             {
                 SetUrlViaPushState("/");
 
-                var app = MountTestComponent<TestRouter>(); 
+                var app = MountTestComponent<TestRouter>();
 
                 app.FindElement(By.LinkText("Target (_blank)")).Click();
 
@@ -185,16 +183,16 @@ namespace Microsoft.AspNetCore.Components.E2ETest.Tests
             SetUrlViaPushState("/");
 
             var app = MountTestComponent<TestRouter>();
-            
+
             app.FindElement(By.LinkText("Other")).Click();
-            
+
             Assert.Single(Browser.WindowHandles);
         }
 
         [Fact]
         public void CanFollowLinkToOtherPageWithBaseRelativeUrl()
         {
-            SetUrlViaPushState("/");            
+            SetUrlViaPushState("/");
 
             var app = MountTestComponent<TestRouter>();
             app.FindElement(By.LinkText("Other with base-relative URL (matches all)")).Click();

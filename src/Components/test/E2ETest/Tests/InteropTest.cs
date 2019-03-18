@@ -22,10 +22,8 @@ namespace Microsoft.AspNetCore.Components.E2ETest.Tests
         {
         }
 
-        public override async Task InitializeAsync()
+        protected override void InitializeAsyncCore()
         {
-            await base.InitializeAsync();
-
             Navigate(ServerPathBase, noReload: true);
             MountTestComponent<InteropComponent>();
         }
@@ -113,7 +111,7 @@ namespace Microsoft.AspNetCore.Components.E2ETest.Tests
                     expectedValues.Add(kvp.Key, kvp.Value);
                 }
             }
-            
+
             var actualValues = new Dictionary<string, string>();
 
             // Act

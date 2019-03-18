@@ -26,10 +26,8 @@ namespace Microsoft.AspNetCore.Components.E2ETest.Tests
         {
         }
 
-        public override async Task InitializeAsync()
+        protected override void InitializeAsyncCore()
         {
-            await base.InitializeAsync();
-
             // On WebAssembly, page reloads are expensive so skip if possible
             Navigate(ServerPathBase, noReload: !_serverFixture.UsingAspNetHost);
         }
@@ -76,7 +74,7 @@ namespace Microsoft.AspNetCore.Components.E2ETest.Tests
             var appElement = MountTestComponent<TypicalValidationComponent>();
             var nameInput = appElement.FindElement(By.ClassName("name")).FindElement(By.TagName("input"));
             var messagesAccessor = CreateValidationMessagesAccessor(appElement);
-            
+
             // Validates on edit
             Browser.Equal("valid", () => nameInput.GetAttribute("class"));
             nameInput.SendKeys("Bert\t");

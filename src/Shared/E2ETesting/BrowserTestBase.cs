@@ -44,6 +44,12 @@ namespace Microsoft.AspNetCore.E2ETesting
             _logs.Value = logs;
 
             Browser = browser;
+
+            InitializeAsyncCore();
+        }
+
+        protected virtual void InitializeAsyncCore()
+        {
         }
     }
 }
