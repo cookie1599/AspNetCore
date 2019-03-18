@@ -30,7 +30,7 @@ namespace Templates.Test
             Project = await ProjectFactory.GetOrCreateProject("mvcnoauth" + (languageOverride == "F#" ? "fsharp" : "csharp"), Output);
 
             var createResult = await Project.RunDotNetNewAsync("mvc", language: languageOverride);
-            Assert.True(0 == createResult.ExitCode, ErrorMessages.GetErrorMessage("create/restore", Project, createResult));
+            Assert.True(0 == createResult.ExitCode, ErrorMessages.GetFailedProcessMessage("create/restore", Project, createResult));
 
             AssertDirectoryExists(Project.TemplateOutputDir, "Areas", false);
             AssertDirectoryExists(Project.TemplateOutputDir, "Extensions", false);
@@ -46,18 +46,20 @@ namespace Templates.Test
             Assert.DoesNotContain("Microsoft.Extensions.SecretManager.Tools", projectFileContents);
 
             var publishResult = await Project.RunDotNetPublishAsync();
-            Assert.True(0 == publishResult.ExitCode, ErrorMessages.GetErrorMessage("publish", Project, publishResult));
+            Assert.True(0 == publishResult.ExitCode, ErrorMessages.GetFailedProcessMessage("publish", Project, publishResult));
 
             // Run dotnet build after publish. The reason is that one uses Config = Debug and the other uses Config = Release
             // The output from publish will go into bin/Release/netcoreapp3.0/publish and won't be affected by calling build
             // later, while the opposite is not true.
 
             var buildResult = await Project.RunDotNetBuildAsync();
-            Assert.True(0 == buildResult.ExitCode, ErrorMessages.GetErrorMessage("build", Project, buildResult));
+            Assert.True(0 == buildResult.ExitCode, ErrorMessages.GetFailedProcessMessage("build", Project, buildResult));
 
             using (var aspNetProcess = Project.StartBuiltProjectAsync())
             {
-                Assert.False(aspNetProcess.Process.HasExited, ErrorMessages.GetErrorMessage("Run built project", Project, aspNetProcess.Process));
+                Assert.False(
+                    aspNetProcess.Process.HasExited,
+                    ErrorMessages.GetFailedProcessMessageOrEmpty("Run built project", Project, aspNetProcess.Process));
 
                 await aspNetProcess.AssertOk("/");
                 await aspNetProcess.AssertOk("/Home/Privacy");
@@ -65,7 +67,9 @@ namespace Templates.Test
 
             using (var aspNetProcess = Project.StartPublishedProjectAsync())
             {
-                Assert.False(aspNetProcess.Process.HasExited, ErrorMessages.GetErrorMessage("Run published project", Project, aspNetProcess.Process));
+                Assert.False(
+                    aspNetProcess.Process.HasExited,
+                    ErrorMessages.GetFailedProcessMessageOrEmpty("Run published project", Project, aspNetProcess.Process));
 
                 await aspNetProcess.AssertOk("/");
                 await aspNetProcess.AssertOk("/Home/Privacy");
@@ -80,7 +84,7 @@ namespace Templates.Test
             Project = await ProjectFactory.GetOrCreateProject("mvcindividual" + (useLocalDB ? "uld" : ""), Output);
 
             var createResult = await Project.RunDotNetNewAsync("mvc", auth: "Individual", useLocalDB: useLocalDB);
-            Assert.True(0 == createResult.ExitCode, ErrorMessages.GetErrorMessage("create/restore", Project, createResult));
+            Assert.True(0 == createResult.ExitCode, ErrorMessages.GetFailedProcessMessage("create/restore", Project, createResult));
 
             AssertDirectoryExists(Project.TemplateOutputDir, "Extensions", false);
             AssertFileExists(Project.TemplateOutputDir, "urlRewrite.config", false);
@@ -93,17 +97,17 @@ namespace Templates.Test
             }
 
             var publishResult = await Project.RunDotNetPublishAsync();
-            Assert.True(0 == publishResult.ExitCode, ErrorMessages.GetErrorMessage("publish", Project, publishResult));
+            Assert.True(0 == publishResult.ExitCode, ErrorMessages.GetFailedProcessMessage("publish", Project, publishResult));
 
             // Run dotnet build after publish. The reason is that one uses Config = Debug and the other uses Config = Release
             // The output from publish will go into bin/Release/netcoreapp3.0/publish and won't be affected by calling build
             // later, while the opposite is not true.
 
             var buildResult = await Project.RunDotNetBuildAsync();
-            Assert.True(0 == buildResult.ExitCode, ErrorMessages.GetErrorMessage("build", Project, buildResult));
+            Assert.True(0 == buildResult.ExitCode, ErrorMessages.GetFailedProcessMessage("build", Project, buildResult));
 
             var migrationsResult = await Project.RunDotNetEfCreateMigrationAsync("mvc");
-            Assert.True(0 == migrationsResult.ExitCode, ErrorMessages.GetErrorMessage("run EF migrations", Project, migrationsResult));
+            Assert.True(0 == migrationsResult.ExitCode, ErrorMessages.GetFailedProcessMessage("run EF migrations", Project, migrationsResult));
             Project.AssertEmptyMigration("mvc");
 
             using (var aspNetProcess = Project.StartBuiltProjectAsync())

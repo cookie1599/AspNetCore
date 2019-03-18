@@ -116,7 +116,7 @@ namespace Templates.Test.Helpers
 
         internal Task<HttpResponseMessage> SendRequest(string path)
         {
-            return _httpClient.GetAsync(path);
+            return _httpClient.GetAsync(new Uri(_listeningUri, path));
         }
 
         public async Task AssertStatusCode(string requestUrl, HttpStatusCode statusCode, string acceptContentType = null)

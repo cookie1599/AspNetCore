@@ -156,9 +156,9 @@ namespace Templates.Test.Helpers
             _exited.TrySetResult(_process.ExitCode);
         }
 
-        internal string GetFormattedOutput(bool failOnRunning = true)
+        internal string GetFormattedOutput()
         {
-            if (!_process.HasExited && failOnRunning)
+            if (!_process.HasExited)
             {
                 throw new InvalidOperationException("Process has not finished running.");
             }

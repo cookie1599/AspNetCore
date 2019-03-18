@@ -5,10 +5,16 @@ namespace Templates.Test.Helpers
 {
     internal static class ErrorMessages
     {
-        public static string GetErrorMessage(string step, Project project, ProcessEx processResult)
+        public static string GetFailedProcessMessage(string step, Project project, ProcessEx processResult)
         {
             return $@"Project {project.ProjectArguments} failed to {step}.
-{processResult.GetFormattedOutput(processResult.HasExited)}";
+{processResult.GetFormattedOutput()}";
+        }
+
+        public static string GetFailedProcessMessageOrEmpty(string step, Project project, ProcessEx processResult)
+        {
+            return processResult.HasExited ? $@"Project {project.ProjectArguments} failed to {step}.
+{processResult.GetFormattedOutput()}" : "";
         }
     }
 }
