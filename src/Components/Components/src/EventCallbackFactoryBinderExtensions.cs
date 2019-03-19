@@ -330,7 +330,22 @@ namespace Microsoft.AspNetCore.Components
             // when a format is used.
             Action<UIChangeEventArgs> callback = (e) =>
             {
-                setter(ConvertDateTime(e.Value, format: null));
+                DateTime value = default;
+                var converted = false;
+                try
+                {
+                    value = ConvertDateTime(e.Value, format: null);
+                    converted = true;
+                }
+                catch
+                {
+                }
+
+                // See comments in CreateBinderCore
+                if (converted)
+                {
+                    setter(value);
+                }
             };
             return factory.Create<UIChangeEventArgs>(receiver, callback);
         }
@@ -355,7 +370,22 @@ namespace Microsoft.AspNetCore.Components
             // when a format is used.
             Action<UIChangeEventArgs> callback = (e) =>
             {
-                setter(ConvertDateTime(e.Value, format));
+                DateTime value = default;
+                var converted = false;
+                try
+                {
+                    value = ConvertDateTime(e.Value, format);
+                    converted = true;
+                }
+                catch
+                {
+                }
+
+                // See comments in CreateBinderCore
+                if (converted)
+                {
+                    setter(value);
+                }
             };
             return factory.Create<UIChangeEventArgs>(receiver, callback);
         }
@@ -403,7 +433,24 @@ namespace Microsoft.AspNetCore.Components
         {
             Action<UIChangeEventArgs> callback = e =>
             {
-                setter(converter(e.Value));
+                T value = default;
+                var converted = false;
+                try
+                {
+                    value = converter(e.Value);
+                    converted = true;
+                }
+                catch
+                {
+                }
+
+                // We only invoke the setter if the conversion didn't throw. This is valuable because it allows us to attempt
+                // to process invalid input but avoid dirtying the state of the component if can't be converted. Imagine if
+                // we assigned default(T) on failure - this would result in trouncing the user's typed in value.
+                if (converted)
+                {
+                    setter(value);
+                }
             };
             return factory.Create<UIChangeEventArgs>(receiver, callback);
         }

@@ -397,7 +397,7 @@ namespace Microsoft.AspNetCore.Components.E2ETest.Tests
             target.Clear();
             target.SendKeys("0.010\t");
             WaitAssert.Equal("0.010", () => boundValue.Text);
-            Assert.Equal("0.010", mirrorValue.GetAttribute("value"));
+            WaitAssert.Equal("0.010", () => mirrorValue.GetAttribute("value"));
         }
 
         [Fact]
